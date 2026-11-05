@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Database
+*.db
+*.sqlite3
+
+# Environment
+.env
+.env.*
+
+# Node
+node_modules/
+.svelte-kit/
+build/
+.output/
+.vercel/
+.netlify/
+.wrangler/
+
+# Video / render artifacts
+experilearn-video/.hyperframes/
+experilearn-video/renders/
+experilearn-video/node_modules/
+
+# OS
+.DS_Store
+Thumbs.db

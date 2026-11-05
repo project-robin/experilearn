@@ -1,0 +1,718 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --ground: #07070d;
+        --ink: #f8fafc;
+        --muted: #94a3b8;
+        --accent: #6366f1;
+        --accent-2: #22d3ee;
+        --surface: #12121c;
+        --font-display: "Space Grotesk", "Inter", sans-serif;
+        --font-body: "Inter", sans-serif;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--ground);
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background:
+          radial-gradient(1100px 700px at 78% -10%, rgba(99, 102, 241, 0.22), transparent 62%),
+          radial-gradient(900px 620px at -10% 108%, rgba(34, 211, 238, 0.13), transparent 60%),
+          var(--ground);
+        font-family: var(--font-body);
+        color: var(--ink);
+      }
+      .orb {
+        position: absolute;
+        border-radius: 999px;
+        filter: blur(90px);
+        opacity: 0.5;
+      }
+      #orb-a {
+        width: 620px;
+        height: 620px;
+        left: -180px;
+        top: -200px;
+        background: #4f46e5;
+        opacity: 0.32;
+      }
+      #orb-b {
+        width: 520px;
+        height: 520px;
+        right: -160px;
+        bottom: -180px;
+        background: #0ea5e9;
+        opacity: 0.22;
+      }
+      .scene {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .eyebrow {
+        font-size: 20px;
+        font-weight: 600;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        color: var(--accent-2);
+      }
+      .headline {
+        font-family: var(--font-display);
+        font-weight: 700;
+        letter-spacing: -0.035em;
+        line-height: 1.02;
+      }
+      .sub {
+        color: var(--muted);
+        font-size: 30px;
+        line-height: 1.45;
+      }
+      .wordmark {
+        font-family: var(--font-display);
+        font-weight: 700;
+        letter-spacing: -0.045em;
+      }
+      .grad {
+        background: linear-gradient(100deg, #818cf8 0%, #6366f1 45%, #22d3ee 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .frame {
+        position: absolute;
+        border-radius: 18px;
+        background: #16161f;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow:
+          0 50px 140px rgba(0, 0, 0, 0.65),
+          0 0 0 1px rgba(99, 102, 241, 0.08);
+        overflow: hidden;
+      }
+      .frame-bar {
+        height: 46px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0 20px;
+        background: #1b1b26;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      }
+      .dot {
+        width: 13px;
+        height: 13px;
+        border-radius: 999px;
+        background: #3a3a4a;
+      }
+      .dot.r {
+        background: #f87171;
+      }
+      .dot.y {
+        background: #fbbf24;
+      }
+      .dot.g {
+        background: #34d399;
+      }
+      .url {
+        margin-left: 14px;
+        flex: 1;
+        max-width: 520px;
+        height: 26px;
+        border-radius: 7px;
+        background: rgba(255, 255, 255, 0.06);
+        color: #a7b1c2;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        padding: 0 12px;
+        letter-spacing: 0.01em;
+      }
+      .frame img {
+        display: block;
+        width: 100%;
+      }
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 22px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #cbd5e1;
+        font-size: 22px;
+        font-weight: 500;
+        margin-right: 14px;
+      }
+      .chip b {
+        color: var(--ink);
+        font-weight: 700;
+      }
+      .stat {
+        font-family: var(--font-display);
+        font-weight: 700;
+        letter-spacing: -0.04em;
+        line-height: 0.9;
+      }
+      .stat-label {
+        color: var(--muted);
+        font-size: 24px;
+        margin-top: 10px;
+        font-weight: 500;
+      }
+      .card {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.11);
+        border-radius: 16px;
+        padding: 18px 24px;
+      }
+      .cred {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        font-size: 19px;
+        color: #cbd5e1;
+      }
+      .role {
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--accent-2);
+        width: 110px;
+        flex: none;
+      }
+      .cred code {
+        font-family: "Inter", sans-serif;
+        color: #e2e8f0;
+        font-size: 18px;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="33.5"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div class="orb" id="orb-a"></div>
+      <div class="orb" id="orb-b"></div>
+
+      <!-- Scene 1: Title -->
+      <section class="scene clip" id="s1" data-start="0" data-duration="4.2" data-track-index="0">
+        <div id="s1-inner" style="text-align: center">
+          <div class="eyebrow" id="s1-eyebrow">Enterprise EdTech Platform</div>
+          <div class="wordmark" id="s1-mark" style="font-size: 176px; margin-top: 26px">
+            Experi<span class="grad">Learn</span>
+          </div>
+          <div class="sub" id="s1-sub" style="font-size: 38px; margin-top: 18px">
+            Learn by doing. Prove it with progress.
+          </div>
+          <div id="s1-pills" style="margin-top: 46px">
+            <span class="chip">Courses</span>
+            <span class="chip">Labs</span>
+            <span class="chip">Quizzes</span>
+            <span class="chip">Certificates</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Scene 2: Home -->
+      <section class="scene clip" id="s2" data-start="4.2" data-duration="6" data-track-index="1">
+        <div style="position: absolute; left: 120px; top: 118px; width: 900px">
+          <div class="eyebrow" id="s2-eyebrow">The platform</div>
+          <div class="headline" id="s2-head" style="font-size: 76px; margin-top: 20px">
+            One place for<br />learning and<br /><span class="grad">proving it.</span>
+          </div>
+          <div class="sub" id="s2-body" style="margin-top: 28px; width: 760px">
+            Catalog, enrollment, modules, quizzes and analytics — wired end to end for three
+            roles.
+          </div>
+          <div id="s2-chips" style="margin-top: 34px">
+            <span class="chip"><b>3</b> roles</span>
+            <span class="chip"><b>10</b> courses</span>
+            <span class="chip"><b>40</b> modules</span>
+          </div>
+        </div>
+        <div class="frame" id="s2-frame" style="right: 96px; top: 258px; width: 940px">
+          <div class="frame-bar">
+            <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+            <span class="url">localhost:5173</span>
+          </div>
+          <img src="assets/shots/01-home.png" alt="ExperiLearn home page" />
+        </div>
+      </section>
+
+      <!-- Scene 3: Catalog -->
+      <section class="scene clip" id="s3" data-start="10.2" data-duration="6" data-track-index="2">
+        <div style="position: absolute; left: 120px; top: 104px">
+          <div class="eyebrow" id="s3-eyebrow">Course catalog</div>
+          <div class="headline" id="s3-head" style="font-size: 68px; margin-top: 18px; width: 1500px">
+            Search, filter, enroll — <span class="grad">in seconds.</span>
+          </div>
+        </div>
+        <div class="stat" id="s3-stat" style="position: absolute; left: 120px; top: 330px; font-size: 150px">
+          10<span class="grad">+</span>
+        </div>
+        <div class="stat-label" id="s3-stat-label" style="position: absolute; left: 126px; top: 490px">
+          hands-on courses
+        </div>
+        <div class="stat" id="s3-stat2" style="position: absolute; left: 460px; top: 330px; font-size: 150px">
+          5
+        </div>
+        <div class="stat-label" id="s3-stat2-label" style="position: absolute; left: 466px; top: 490px">
+          categories
+        </div>
+        <div class="frame" id="s3-frame" style="right: 100px; top: 250px; width: 1050px">
+          <div class="frame-bar">
+            <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+            <span class="url">localhost:5173/courses</span>
+          </div>
+          <img src="assets/shots/02-catalog.png" alt="Course catalog" />
+        </div>
+      </section>
+
+      <!-- Scene 4: Course detail -->
+      <section class="scene clip" id="s4" data-start="16.2" data-duration="6" data-track-index="3">
+        <div style="position: absolute; left: 120px; top: 110px">
+          <div class="eyebrow" id="s4-eyebrow">Course detail</div>
+          <div class="headline" id="s4-head" style="font-size: 68px; margin-top: 18px; width: 1600px">
+            Every course is a sequence of <span class="grad">labs and quizzes.</span>
+          </div>
+        </div>
+        <div id="s4-tags" style="position: absolute; left: 120px; top: 350px; width: 560px">
+          <span class="chip">Virtual Lab</span>
+          <span class="chip">Simulation</span>
+          <span class="chip">Case Study</span>
+          <span class="chip">DIY Project</span>
+        </div>
+        <div class="card" id="s4-note" style="position: absolute; left: 120px; top: 512px; width: 480px">
+          <div style="font-size: 21px; color: #cbd5e1; line-height: 1.5">
+            Enroll once. Work through typed modules. Auto-graded quizzes unlock the next step.
+          </div>
+          <div style="margin-top: 16px; font-size: 17px; color: var(--accent-2); font-weight: 600">
+            $49 · Science · Beginner
+          </div>
+        </div>
+        <div class="frame" id="s4-frame" style="right: 90px; top: 280px; width: 1180px">
+          <div class="frame-bar">
+            <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+            <span class="url">localhost:5173/courses/1</span>
+          </div>
+          <img src="assets/shots/03-course.png" alt="Course detail with modules" />
+        </div>
+      </section>
+
+      <!-- Scene 5: Dashboards -->
+      <section class="scene clip" id="s5" data-start="22.2" data-duration="6" data-track-index="4">
+        <div style="position: absolute; left: 120px; top: 104px">
+          <div class="eyebrow" id="s5-eyebrow">Dashboards</div>
+          <div class="headline" id="s5-head" style="font-size: 68px; margin-top: 18px; width: 1500px">
+            Progress for learners. <span class="grad">Signal for teams.</span>
+          </div>
+        </div>
+        <div class="frame" id="s5-frame-a" style="left: 120px; top: 330px; width: 860px">
+          <div class="frame-bar">
+            <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+            <span class="url">localhost:5173/dashboard</span>
+          </div>
+          <img src="assets/shots/04-dashboard.png" alt="Student dashboard" />
+        </div>
+        <div class="frame" id="s5-frame-b" style="right: 110px; top: 380px; width: 800px">
+          <div class="frame-bar">
+            <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+            <span class="url">localhost:5173/instructor</span>
+          </div>
+          <img src="assets/shots/05-instructor.png" alt="Instructor analytics" />
+        </div>
+      </section>
+
+      <!-- Scene 6: End card -->
+      <section class="scene clip" id="s6" data-start="28.2" data-duration="5.3" data-track-index="5">
+        <div style="text-align: center">
+          <div class="eyebrow" id="s6-eyebrow">Ready when you are</div>
+          <div class="headline" id="s6-head" style="font-size: 92px; margin-top: 22px">
+            Start learning <span class="grad">today.</span>
+          </div>
+          <div id="s6-creds" style="margin-top: 54px; display: inline-block; text-align: left">
+            <div class="card" style="margin-bottom: 14px">
+              <div class="cred">
+                <span class="role">Student</span>
+                <code>student@experilearn.com · Student@123</code>
+              </div>
+            </div>
+            <div class="card" style="margin-bottom: 14px">
+              <div class="cred">
+                <span class="role">Instructor</span>
+                <code>instructor@experilearn.com · Instructor@123</code>
+              </div>
+            </div>
+            <div class="card">
+              <div class="cred">
+                <span class="role">Admin</span>
+                <code>admin@experilearn.com · Admin@123</code>
+              </div>
+            </div>
+          </div>
+          <div id="s6-foot" style="margin-top: 48px; color: #94a3b8; font-size: 20px; letter-spacing: 0.06em">
+            FastAPI · SvelteKit · PostgreSQL · Docker · CI
+          </div>
+        </div>
+      </section>
+
+      <audio id="sfx-whoosh-1"
+        src="assets/audio/whoosh.mp3"
+        class="clip"
+        data-start="4.05"
+        data-duration="1.1"
+        data-volume="0.5"
+        data-fade-out="0.5"
+      ></audio>
+      <audio id="sfx-whoosh-2"
+        src="assets/audio/whoosh.mp3"
+        class="clip"
+        data-start="10.05"
+        data-duration="1.1"
+        data-volume="0.5"
+        data-fade-out="0.5"
+      ></audio>
+      <audio id="sfx-whoosh-3"
+        src="assets/audio/whoosh.mp3"
+        class="clip"
+        data-start="16.05"
+        data-duration="1.1"
+        data-volume="0.5"
+        data-fade-out="0.5"
+      ></audio>
+      <audio id="sfx-whoosh-4"
+        src="assets/audio/whoosh.mp3"
+        class="clip"
+        data-start="22.05"
+        data-duration="1.1"
+        data-volume="0.5"
+        data-fade-out="0.5"
+      ></audio>
+      <audio id="sfx-whoosh-5"
+        src="assets/audio/whoosh.mp3"
+        class="clip"
+        data-start="28.05"
+        data-duration="1.1"
+        data-volume="0.5"
+        data-fade-out="0.5"
+      ></audio>
+      <audio id="sfx-pop-1"
+        src="assets/audio/pop.mp3"
+        class="clip"
+        data-start="0.9"
+        data-duration="0.5"
+        data-volume="0.5"
+      ></audio>
+      <audio id="sfx-pop-2"
+        src="assets/audio/pop.mp3"
+        class="clip"
+        data-start="10.45"
+        data-duration="0.5"
+        data-volume="0.45"
+      ></audio>
+      <audio id="sfx-pop-3"
+        src="assets/audio/pop.mp3"
+        class="clip"
+        data-start="10.65"
+        data-duration="0.5"
+        data-volume="0.45"
+      ></audio>
+      <audio id="sfx-click-1"
+        src="assets/audio/click-soft.mp3"
+        class="clip"
+        data-start="4.75"
+        data-duration="0.4"
+        data-volume="0.4"
+      ></audio>
+      <audio id="sfx-chime-1"
+        src="assets/audio/chime.mp3"
+        class="clip"
+        data-start="28.6"
+        data-duration="1.6"
+        data-volume="0.5"
+        data-fade-out="0.6"
+      ></audio>
+
+      <script>
+        const tl = gsap.timeline({ paused: true });
+
+        gsap.set(
+          [
+            "#s1-eyebrow",
+            "#s1-mark",
+            "#s1-sub",
+            "#s1-pills .chip",
+            "#s2-eyebrow",
+            "#s2-head",
+            "#s2-body",
+            "#s2-chips .chip",
+            "#s2-frame",
+            "#s3-eyebrow",
+            "#s3-head",
+            "#s3-stat",
+            "#s3-stat-label",
+            "#s3-stat2",
+            "#s3-stat2-label",
+            "#s3-frame",
+            "#s4-eyebrow",
+            "#s4-head",
+            "#s4-tags .chip",
+            "#s4-note",
+            "#s4-frame",
+            "#s5-eyebrow",
+            "#s5-head",
+            "#s5-frame-a",
+            "#s5-frame-b",
+            "#s6-eyebrow",
+            "#s6-head",
+            "#s6-creds .card",
+            "#s6-foot",
+          ].join(","),
+          { opacity: 0 }
+        );
+
+        /* Scene 1 — title */
+        tl.fromTo(
+          "#s1-eyebrow",
+          { opacity: 0, y: 18 },
+          { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" },
+          0.05
+        )
+          .fromTo(
+            "#s1-mark",
+            { opacity: 0, scale: 0.92, filter: "blur(10px)" },
+            { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.8, ease: "power4.out" },
+            0.2
+          )
+          .fromTo(
+            "#s1-sub",
+            { opacity: 0, y: 20 },
+            { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" },
+            0.65
+          )
+          .fromTo(
+            "#s1-pills .chip",
+            { opacity: 0, y: 22 },
+            { opacity: 1, y: 0, duration: 0.5, stagger: 0.1, ease: "power3.out" },
+            0.95
+          )
+          .to("#s1-inner", { opacity: 0, y: -26, duration: 0.5, ease: "power2.in" }, 3.6);
+
+        /* Scene 2 — home */
+        tl.fromTo(
+          "#s2-eyebrow",
+          { opacity: 0, x: -24 },
+          { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" },
+          4.4
+        )
+          .fromTo(
+            "#s2-head",
+            { opacity: 0, y: 44 },
+            { opacity: 1, y: 0, duration: 0.7, ease: "power4.out" },
+            4.55
+          )
+          .fromTo(
+            "#s2-body",
+            { opacity: 0, y: 24 },
+            { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" },
+            4.85
+          )
+          .fromTo(
+            "#s2-chips .chip",
+            { opacity: 0, y: 18 },
+            { opacity: 1, y: 0, duration: 0.45, stagger: 0.09, ease: "power3.out" },
+            5.05
+          )
+          .fromTo(
+            "#s2-frame",
+            { opacity: 0, y: 50, scale: 0.97 },
+            { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: "power3.out" },
+            4.75
+          )
+          .to("#s2-frame", { y: -14, duration: 1.1, ease: "sine.inOut" }, 5.6)
+          .to("#s2", { opacity: 0, duration: 0.45, ease: "power2.in" }, 9.7);
+
+        /* Scene 3 — catalog */
+        tl.fromTo(
+          "#s3-eyebrow",
+          { opacity: 0, x: -24 },
+          { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" },
+          10.4
+        )
+          .fromTo(
+            "#s3-head",
+            { opacity: 0, y: 40 },
+            { opacity: 1, y: 0, duration: 0.65, ease: "power4.out" },
+            10.55
+          )
+          .fromTo(
+            "#s3-stat",
+            { opacity: 0, scale: 0.7, y: 20 },
+            { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: "back.out(1.7)" },
+            10.85
+          )
+          .fromTo(
+            "#s3-stat-label",
+            { opacity: 0, y: 16 },
+            { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" },
+            11.05
+          )
+          .fromTo(
+            "#s3-stat2",
+            { opacity: 0, scale: 0.7, y: 20 },
+            { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: "back.out(1.7)" },
+            11.1
+          )
+          .fromTo(
+            "#s3-stat2-label",
+            { opacity: 0, y: 16 },
+            { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" },
+            11.3
+          )
+          .fromTo(
+            "#s3-frame",
+            { opacity: 0, x: 70, rotate: 1.2 },
+            { opacity: 1, x: 0, rotate: 0, duration: 0.85, ease: "power3.out" },
+            10.7
+          )
+          .to("#s3", { opacity: 0, duration: 0.45, ease: "power2.in" }, 15.7);
+
+        /* Scene 4 — course detail */
+        tl.fromTo(
+          "#s4-eyebrow",
+          { opacity: 0, x: -24 },
+          { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" },
+          16.4
+        )
+          .fromTo(
+            "#s4-head",
+            { opacity: 0, y: 40 },
+            { opacity: 1, y: 0, duration: 0.65, ease: "power4.out" },
+            16.55
+          )
+          .fromTo(
+            "#s4-tags .chip",
+            { opacity: 0, y: 18 },
+            { opacity: 1, y: 0, duration: 0.45, stagger: 0.09, ease: "power3.out" },
+            16.85
+          )
+          .fromTo(
+            "#s4-note",
+            { opacity: 0, y: 26 },
+            { opacity: 1, y: 0, duration: 0.55, ease: "power3.out" },
+            17.15
+          )
+          .fromTo(
+            "#s4-frame",
+            { opacity: 0, x: 70, rotate: -1.1 },
+            { opacity: 1, x: 0, rotate: 0, duration: 0.85, ease: "power3.out" },
+            16.7
+          )
+          .to("#s4", { opacity: 0, duration: 0.45, ease: "power2.in" }, 21.7);
+
+        /* Scene 5 — dashboards */
+        tl.fromTo(
+          "#s5-eyebrow",
+          { opacity: 0, x: -24 },
+          { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" },
+          22.4
+        )
+          .fromTo(
+            "#s5-head",
+            { opacity: 0, y: 40 },
+            { opacity: 1, y: 0, duration: 0.65, ease: "power4.out" },
+            22.55
+          )
+          .fromTo(
+            "#s5-frame-a",
+            { opacity: 0, y: 64 },
+            { opacity: 1, y: 0, duration: 0.75, ease: "power3.out" },
+            22.7
+          )
+          .fromTo(
+            "#s5-frame-b",
+            { opacity: 0, y: 74 },
+            { opacity: 1, y: 0, duration: 0.75, ease: "power3.out" },
+            22.95
+          )
+          .to("#s5-frame-a", { y: -12, duration: 1.2, ease: "sine.inOut" }, 23.6)
+          .to("#s5-frame-b", { y: -18, duration: 1.1, ease: "sine.inOut" }, 23.7)
+          .to("#s5", { opacity: 0, duration: 0.45, ease: "power2.in" }, 27.7);
+
+        /* Scene 6 — end card */
+        tl.fromTo(
+          "#s6-eyebrow",
+          { opacity: 0, y: 18 },
+          { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" },
+          28.45
+        )
+          .fromTo(
+            "#s6-head",
+            { opacity: 0, scale: 0.93 },
+            { opacity: 1, scale: 1, duration: 0.7, ease: "power4.out" },
+            28.6
+          )
+          .fromTo(
+            "#s6-creds .card",
+            { opacity: 0, y: 26 },
+            { opacity: 1, y: 0, duration: 0.5, stagger: 0.12, ease: "power3.out" },
+            29.0
+          )
+          .fromTo(
+            "#s6-foot",
+            { opacity: 0 },
+            { opacity: 1, duration: 0.6, ease: "power2.out" },
+            29.75
+          );
+
+        /* Ambient background motion across the whole film */
+        tl.to("#orb-a", { x: 120, y: 90, duration: 16, ease: "sine.inOut" }, 0).to(
+          "#orb-a",
+          { x: 0, y: 0, duration: 17.5, ease: "sine.inOut" },
+          16
+        );
+        tl.to("#orb-b", { x: -110, y: -70, duration: 15, ease: "sine.inOut" }, 0).to(
+          "#orb-b",
+          { x: 0, y: 0, duration: 18.5, ease: "sine.inOut" },
+          15
+        );
+
+        window.__timelines = window.__timelines || {};
+        window.__timelines["main"] = tl;
+        tl.seek(0);
+      </script>
+    </div>
+  </body>
+</html>
