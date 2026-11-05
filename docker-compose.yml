@@ -21,9 +21,10 @@ services:
       - postgres
 
   frontend:
-    build: ./frontend
-    environment:
-      VITE_API: http://localhost:8000
+    build:
+      context: ./frontend
+      args:
+        VITE_API: http://localhost:8000
     ports:
       - "5173:5173"
     depends_on:

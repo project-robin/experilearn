@@ -1,0 +1,12 @@
+# Add to /etc/caddy/Caddyfile, replace the hostname with yours.
+experilearn.64-181-219-26.sslip.io {
+	encode gzip
+	handle_path /api/* {
+		reverse_proxy 127.0.0.1:8000
+	}
+	handle {
+		root * /var/www/experilearn
+		try_files {path} /index.html
+		file_server
+	}
+}
